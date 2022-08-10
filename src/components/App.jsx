@@ -1,16 +1,17 @@
+import { GlobalStyle } from "./GlobalStyle";
+import { ThemeProvider } from 'styled-components'
+import {theme} from '../theme'
+import {Feedback} from "./Feedback/Feedback"
+
 export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+
+  return (    
+    <>
+    <GlobalStyle/>
+    <ThemeProvider theme={theme}>
+      <Feedback >
+      </Feedback>
+    </ThemeProvider>
+    </>
   );
 };
