@@ -1,55 +1,52 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import { Buttons } from "./Buttons/Buttons";
 import { Statistics } from "./Statistics/Statistics";
 import { Section } from "./Section/Section";
-export class Feedback extends Component {
-  state = { good: 0, neutral: 0, bad: 0 };
+export const Feedback = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNuetral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const totalStats = good + neutral + bad;
 
-  goodPlus = () => {
-    this.setState({ good: this.state.good + 1 });
+  const countPositiveFeedbackPercentage = () => {
+    return Math.round((good * 100) / totalStats);
   };
-  neutralPlus = () => {
-    this.setState({ neutral: this.state.neutral + 1 });
-  };
-  badPlus = () => {
-    this.setState({ bad: this.state.bad + 1 });
-  };
-  countTotalFeedback = () => {
-    const sumValues = Object.values(this.state).reduce((a, b) => a + b);
-    return sumValues;
-  };
-  countPositiveFeedbackPercentage = () => {
-    return Math.round((this.state.good * 100) / this.countTotalFeedback());
-  };
-  onLeaveFeedback = (e) => {
-    const name = e.target.name;
-    this.setState((prevState) => ({
-      [name]: prevState[name] + 1,
-    }));
+  const onLeaveFeedback = (option) => {
+    switch (option) {
+      case "good":
+        setGood((prevGood) => prevGood + 1);
+        break;
+      case "neutral":
+        setNuetral((prevNeutral) => prevNeutral + 1);
+        break;
+      case "bad":
+        setBad((prevBad) => prevBad + 1);
+        break;
+      default:
+        return;
+    }
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    const totalStats = this.countTotalFeedback();
-    const percent = this.countPositiveFeedbackPercentage();
-    const stateNames = Object.keys(this.state);
-    return (
-      <>
-        <Section title="Please leave feedback">
-          <Buttons options={stateNames} onLeaveFeedback={this.onLeaveFeedback}>
-            Bb
-          </Buttons>
-        </Section>
-        <Section title="Statistics">
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={totalStats}
-            positivePercentage={percent}
-          />
-        </Section>
-      </>
-    );
-  }
-}
+  // const totalStats = countTotalFeedback();
+  const percent = countPositiveFeedbackPercentage();
+  // const stateNames = Object.keys(this.state);
+
+  // const totalStats =
+  const options = ["good", "neutral", "bad"];
+  return (
+    <>
+      <Section title="Please leave feedback">
+        <Buttons options={options} onLeaveFeedback={onLeaveFeedback}></Buttons>
+      </Section>
+      <Section title="Statistics">
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={totalStats}
+          positivePercentage={percent}
+        />
+      </Section>
+    </>
+  );
+};
